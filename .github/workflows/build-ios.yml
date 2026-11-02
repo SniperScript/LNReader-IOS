@@ -48,8 +48,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Install Dependencies
-        run: pnpm install --prefer-offline
+      - name: Configure Production Dependencies
+        run: |
+          npm pkg delete dependencies.expo-dev-client
+          pnpm install --no-frozen-lockfile
 
       - name: Configure Release Environment
         env:
