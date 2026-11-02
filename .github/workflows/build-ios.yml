@@ -33,9 +33,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select Xcode 16
+      - name: Select Xcode Version
         run: |
-          sudo xcode-select -s /Applications/Xcode_16.2.app || sudo xcode-select -s /Applications/Xcode_16.1.app || sudo xcode-select -s /Applications/Xcode_16.app || true
+          ls -la /Applications/ | grep -i Xcode || true
+          LATEST_XCODE=$(find /Applications -maxdepth 1 -name "Xcode_*.app" | sort -V | tail -n 1)
+          if [ -n "$LATEST_XCODE" ]; then
+            echo "Selecting $LATEST_XCODE"
+            sudo xcode-select -s "$LATEST_XCODE"
+          fi
           xcodebuild -version
 
       - name: Set Up pnpm
@@ -52,6 +57,8 @@ jobs:
         run: |
           npm pkg delete dependencies.expo-dev-client
           pnpm install --no-frozen-lockfile
+          # Fix Swift tools version 6.2 incompatibility with Xcode 16.2 (Swift 6.0)
+          find node_modules -name "Package.swift" -exec sed -i '' 's/swift-tools-version: 6\.2\(\.0\)\{0,1\}/swift-tools-version: 6.0/g' {} + || true
 
       - name: Configure Release Environment
         env:
@@ -64,7 +71,10 @@ jobs:
 
       - name: Install CocoaPods
         working-directory: ios
-        run: pod install --repo-update
+        run: |
+          pod install --repo-update
+          find . -name "Package.swift" -exec sed -i '' 's/swift-tools-version: 6\.2\(\.0\)\{0,1\}/swift-tools-version: 6.0/g' {} + || true
+          find ~/Library/Caches/org.swift.swiftpm -name "Package.swift" -exec sed -i '' 's/swift-tools-version: 6\.2\(\.0\)\{0,1\}/swift-tools-version: 6.0/g' {} + 2>/dev/null || true
 
       - name: Build iOS App
         working-directory: ios
