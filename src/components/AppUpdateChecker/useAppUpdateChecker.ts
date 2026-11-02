@@ -31,7 +31,7 @@ export interface AppRelease {
 }
 
 const LATEST_RELEASE_URL =
-  Platform.OS === 'ios'
+  Platform?.OS === 'ios'
     ? 'https://api.github.com/repos/SniperScript/LNReader-IOS/releases/latest'
     : 'https://api.github.com/repos/LNReader/lnreader/releases/latest';
 const LAST_UPDATE_CHECK_KEY = 'LAST_UPDATE_CHECK';
@@ -41,14 +41,13 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const getReleaseDownloadUrl = async (
   assets: GithubReleaseAsset[] = [],
 ): Promise<string | undefined> => {
-  if (Platform.OS === 'ios') {
+  if (Platform?.OS === 'ios') {
     const ipaAsset = assets.find(
       asset => asset.name?.endsWith('.ipa') && asset.browser_download_url,
     );
-    return (
-      ipaAsset?.browser_download_url ||
-      'https://github.com/SniperScript/LNReader-IOS/releases/latest'
-    );
+    if (ipaAsset?.browser_download_url) {
+      return ipaAsset.browser_download_url;
+    }
   }
 
   const apkAssets = assets.filter(asset => {

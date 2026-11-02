@@ -30,7 +30,7 @@ class MyLogger implements Logger {
 
 const DB_NAME = 'lnreader.db';
 const _db = open(
-  Platform.OS === 'ios'
+  Platform?.OS === 'ios'
     ? { name: DB_NAME }
     : { name: DB_NAME, location: '../files/SQLite' },
 );

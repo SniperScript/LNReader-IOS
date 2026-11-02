@@ -229,7 +229,7 @@ export class BackgroundTaskQueue {
       }
       if (Platform.OS === 'ios') {
         const { runHeadlessBackgroundTask } = await import('./headlessTask');
-        void runHeadlessBackgroundTask({ taskId: id }).catch(console.error);
+        void runHeadlessBackgroundTask({ taskId: id }).catch(() => undefined);
       }
     } catch (error) {
       this.store(this.getSnapshot().filter(item => item.id !== pending.id));

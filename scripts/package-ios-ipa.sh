@@ -42,3 +42,4 @@ mv "$TMP_DIR/LNReader-iOS.ipa" "$IPA_PATH"
 rm -rf "$TMP_DIR"
 
 echo "Successfully packaged IPA: $IPA_PATH"
+
