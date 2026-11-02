@@ -1,4 +1,4 @@
-import { DeviceEventEmitter } from 'react-native';
+import { DeviceEventEmitter, Platform } from 'react-native';
 
 import NativeBackgroundTasks from '@modules/native-background-tasks';
 import { getString } from '@i18n/translations';
@@ -226,6 +226,10 @@ export class BackgroundTaskQueue {
         showToast(
           getString('notifications.taskQueued', { task: pending.meta.name }),
         );
+      }
+      if (Platform.OS === 'ios') {
+        const { runHeadlessBackgroundTask } = await import('./headlessTask');
+        void runHeadlessBackgroundTask({ taskId: id }).catch(console.error);
       }
     } catch (error) {
       this.store(this.getSnapshot().filter(item => item.id !== pending.id));

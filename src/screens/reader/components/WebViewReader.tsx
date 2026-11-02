@@ -2,9 +2,11 @@ import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeEventEmitter,
   NativeModules,
+  Platform,
   StatusBar,
   StyleSheet,
 } from 'react-native';
+import NativeFile from '@modules/native-file';
 import WebView from 'react-native-webview';
 import * as Linking from 'expo-linking';
 import color from 'color';
@@ -122,6 +124,8 @@ let lastKnownBatteryLevel = 0;
 
 const assetsUriPrefix = __DEV__
   ? 'http://localhost:8081/assets'
+  : Platform.OS === 'ios'
+  ? `file://${NativeFile.MainBundlePath || NativeFile.DocumentDirectoryPath}/reader`
   : 'file:///android_asset';
 
 const WebViewReader: React.FC<WebViewReaderProps> = ({
@@ -364,7 +368,7 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
                 <style id="ln-font">
                 @font-face {
                   font-family: ${initialReaderSettings.fontFamily};
-                  src: url("file:///android_asset/fonts/${
+                  src: url("${assetsUriPrefix}/fonts/${
                     initialReaderSettings.fontFamily
                   }.ttf");
                 }

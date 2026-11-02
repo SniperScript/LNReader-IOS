@@ -51,6 +51,10 @@
             },
             "enableMinifyInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true
+          },
+          "ios": {
+            "useFrameworks": "static",
+            "deploymentTarget": "15.1"
           }
         }
       ]
@@ -85,9 +89,28 @@
       }
     },
     "ios": {
+      "supportsTablet": true,
       "bundleIdentifier": "com.rajarsheechatterjee.LNReader",
+      "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["audio"],
+        "UIRequiresFullScreen": false,
+        "UIFileSharingEnabled": true,
+        "LSSupportsOpeningDocumentsInPlace": true,
+        "NSDocumentsFolderUsageDescription": "LNReader needs access to import and export light novel backups and EPUB files.",
+        "NSPhotoLibraryUsageDescription": "LNReader needs access to save novel cover images.",
+        "NSPhotoLibraryAddUsageDescription": "LNReader needs access to save novel cover images.",
+        "UISupportedInterfaceOrientations": [
+          "UIInterfaceOrientationPortrait",
+          "UIInterfaceOrientationLandscapeLeft",
+          "UIInterfaceOrientationLandscapeRight"
+        ],
+        "UISupportedInterfaceOrientations~ipad": [
+          "UIInterfaceOrientationPortrait",
+          "UIInterfaceOrientationPortraitUpsideDown",
+          "UIInterfaceOrientationLandscapeLeft",
+          "UIInterfaceOrientationLandscapeRight"
+        ]
       }
     }
   }

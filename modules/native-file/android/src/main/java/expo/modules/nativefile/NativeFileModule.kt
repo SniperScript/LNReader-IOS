@@ -616,6 +616,10 @@ class NativeFileModule : Module() {
             val directory = context?.externalCacheDir ?: context?.cacheDir
             directory?.absolutePath.orEmpty()
         }
+
+        Constant("MainBundlePath") {
+            ""
+        }
     }
 
     private fun launchDocumentIntent(intent: Intent, requestCode: Int, promise: Promise) {

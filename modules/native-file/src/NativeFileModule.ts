@@ -20,6 +20,7 @@ type NativeFileModule = {
   DocumentDirectoryPath: string;
   ExternalDirectoryPath: string;
   ExternalCachesDirectoryPath: string;
+  MainBundlePath: string;
   createDocument(filename: string, mimeType: string): Promise<string>;
   pickDocument(mimeType: string): Promise<string>;
   pickDirectory(): Promise<DirectorySelection>;
