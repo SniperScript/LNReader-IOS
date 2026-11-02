@@ -7,7 +7,7 @@
 <h1 align="center">LNReader for iOS & iPadOS</h1>
 
 <p align="center">
-  LNReader is a free and open-source light novel reader for iOS, iPadOS, and Android, inspired by Tachiyomi.
+  LNReader is a free and open-source light novel reader for Android, inspired by Tachiyomi. I have made a fork of the official LNReader and made it usable for ios. Before using this, please do check out the official LNReader github repository for detailed info!
   This repository provides official iOS and iPadOS compatibility with native modules, iPad multitasking, and automated IPA generation.
 </p>
 
