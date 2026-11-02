@@ -24,7 +24,7 @@ env:
 jobs:
   build-ios:
     name: Build iOS / iPad IPA
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 90
 
     steps:
@@ -56,19 +56,8 @@ jobs:
         run: |
           npm pkg delete dependencies.expo-dev-client
           pnpm install --no-frozen-lockfile
-          # Fix Swift 6 type ambiguity in ExpoModulesJSI Date
+          # Fix Swift 6.2 type ambiguity in ExpoModulesJSI Date
           find node_modules -name "JavaScriptCodable+Date.swift" -exec sed -i '' 's/abs(milliseconds) <= [^ ]*/(abs(milliseconds) as Double) <= 8640000000000000.0/g' {} + || true
-          # Normalize Package.swift files for Xcode 16 Swift compatibility
-          python3 -c "
-          import glob, re
-          for p in glob.glob('node_modules/**/Package.swift', recursive=True):
-              with open(p, 'r') as f:
-                  s = f.read()
-              s = s.replace('// swift-tools-version: 6.2', '// swift-tools-version: 6.0')
-              s = re.sub(r',(\s*[\]\)])', r'\1', s)
-              with open(p, 'w') as f:
-                  f.write(s)
-          " || true
 
       - name: Configure Release Environment
         env:
