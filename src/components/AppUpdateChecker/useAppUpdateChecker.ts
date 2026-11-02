@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import { newer } from '@utils/compareVersion';
@@ -30,7 +31,9 @@ export interface AppRelease {
 }
 
 const LATEST_RELEASE_URL =
-  'https://api.github.com/repos/LNReader/lnreader/releases/latest';
+  Platform.OS === 'ios'
+    ? 'https://api.github.com/repos/SniperScript/LNReader-IOS/releases/latest'
+    : 'https://api.github.com/repos/LNReader/lnreader/releases/latest';
 const LAST_UPDATE_CHECK_KEY = 'LAST_UPDATE_CHECK';
 const IGNORED_UPDATE_VERSION_KEY = 'IGNORED_UPDATE_VERSION';
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -38,6 +41,16 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const getReleaseDownloadUrl = async (
   assets: GithubReleaseAsset[] = [],
 ): Promise<string | undefined> => {
+  if (Platform.OS === 'ios') {
+    const ipaAsset = assets.find(
+      asset => asset.name?.endsWith('.ipa') && asset.browser_download_url,
+    );
+    return (
+      ipaAsset?.browser_download_url ||
+      'https://github.com/SniperScript/LNReader-IOS/releases/latest'
+    );
+  }
+
   const apkAssets = assets.filter(asset => {
     return asset.name?.endsWith('.apk') && asset.browser_download_url;
   });

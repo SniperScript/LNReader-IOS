@@ -19,6 +19,7 @@ import {
   createNovelTriggerQueryUpdate,
 } from './queryStrings/triggers';
 import { useEffect, useReducer } from 'react';
+import { Platform } from 'react-native';
 import { getErrorChainMessages } from '@utils/error';
 
 class MyLogger implements Logger {
@@ -28,7 +29,11 @@ class MyLogger implements Logger {
 }
 
 const DB_NAME = 'lnreader.db';
-const _db = open({ name: DB_NAME, location: '../files/SQLite' });
+const _db = open(
+  Platform.OS === 'ios'
+    ? { name: DB_NAME }
+    : { name: DB_NAME, location: '../files/SQLite' },
+);
 
 const INITIAL_MIGRATION_NAME = '20251222152612_past_mandrill';
 const INITIAL_MIGRATION_CREATED_AT = 1766417172000;
